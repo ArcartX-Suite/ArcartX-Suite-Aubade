@@ -15,9 +15,6 @@ dependencies {
 }
 
 tasks.shadowJar {
-    from(zipTree("libs/axs-api.jar")) {
-        include("xuanmo/arcartxsuite/api/aubade/**")
-    }
     archiveBaseName.set("Aubade")
     archiveClassifier.set("")
     archiveVersion.set(project.version.toString())

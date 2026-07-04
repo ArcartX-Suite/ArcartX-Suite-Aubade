@@ -8,8 +8,5 @@ dependencies {
 }
 
 tasks.jar {
-    from(zipTree("../aubade-core/libs/axs-api.jar")) {
-        include("xuanmo/arcartxsuite/api/aubade/**")
-    }
     archiveBaseName.set("Aubade-Game-SkyBlock")
 }
