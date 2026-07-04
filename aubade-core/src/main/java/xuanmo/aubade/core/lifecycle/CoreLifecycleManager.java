@@ -88,7 +88,6 @@ public class CoreLifecycleManager {
 
     this.uiManager = new UiManager(core);
     core.uiManager(uiManager);
-    registerCoreUis();
 
     this.addonLifecycleManager = new AddonLifecycleManager(core, storageManager);
     core.addonLifecycleManager(addonLifecycleManager);
@@ -121,26 +120,6 @@ public class CoreLifecycleManager {
     addonLifecycleManager.registerAddon(new BlueprintGeneratorAddon(core));
     addonLifecycleManager.enableAddons();
 
-  }
-
-  private void registerCoreUis() {
-    File uiDir = new File(core.dataFolder(), "arcartx/ui");
-    String[] uiFiles = {
-        "aubade_main.yml", "aubade_admin.yml", "aubade_top.yml", "aubade_create.yml", "aubade_invite.yml",
-        "level_display.yml", "level_top.yml",
-        "member_manage.yml", "team_settings.yml",
-        "challenges_list.yml", "challenge_detail.yml",
-        "island_bank.yml", "warp_board.yml",
-        "biome_selector.yml", "border_settings.yml"
-    };
-    for (String fileName : uiFiles) {
-      File file = new File(uiDir, fileName);
-      if (!file.exists()) {
-        core.saveResource("arcartx/ui/" + fileName, false);
-      }
-      String uiId = fileName.replace(".yml", "");
-      uiManager.registerUi(uiId, uiId, file);
-    }
   }
 
   public void onDisable() {

@@ -85,6 +85,7 @@ public final class AubadeModule extends AbstractAXSModule implements ModuleComma
     core.commandManager(commandManager);
     core.lifecycleManager(new CoreLifecycleManager(core));
     core.getLifecycleManager().onEnable();
+    registerCoreUis();
     registerCapability(DatabaseMigratable.class, new DatabaseMigratable() {
       @Override
       public @NotNull String moduleId() {
@@ -153,6 +154,29 @@ public final class AubadeModule extends AbstractAXSModule implements ModuleComma
   @Override
   public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull String[] args) {
     return commandManager != null ? commandManager.onTabComplete(sender, normalizeArgs(args)) : null;
+  }
+
+  private void registerCoreUis() {
+    if (core == null || core.getUiManager() == null) {
+      return;
+    }
+    File uiDir = new File(core.dataFolder(), "arcartx/ui");
+    String[] uiFiles = {
+        "aubade_main.yml", "aubade_admin.yml", "aubade_top.yml", "aubade_create.yml", "aubade_invite.yml",
+        "level_display.yml", "level_top.yml",
+        "member_manage.yml", "team_settings.yml",
+        "challenges_list.yml", "challenge_detail.yml",
+        "island_bank.yml", "warp_board.yml",
+        "biome_selector.yml", "border_settings.yml"
+    };
+    for (String fileName : uiFiles) {
+      File file = new File(uiDir, fileName);
+      if (!file.exists()) {
+        core.saveResource("arcartx/ui/" + fileName, false);
+      }
+      String uiId = fileName.replace(".yml", "");
+      core.getUiManager().registerUi(uiId, uiId, file);
+    }
   }
 
   private String[] normalizeArgs(String[] args) {
