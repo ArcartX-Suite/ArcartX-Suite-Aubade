@@ -2,6 +2,8 @@
 
 > 现有系列命名：**Ensemble**（合奏，指 ArcartXSuite/modules 下现有 26 个模块）
 > Aubade 系列：**独立仓库 `ArcartX-Aubade`**，各模块 jar 通过 axs-api 中的共享契约互通。
+>
+> 注：`aubade-api` 为早期规划中的仓内契约名；当前共享契约已由 `ArcartXSuite/axs-api` 提供。
 
 ## 0. 关键约束（已确认）
 - 每个 AXS 模块 jar 有独立 `ModuleClassLoader`，父加载器 = AXS 宿主。跨模块 jar **只能共享 axs-api 里的类型**。
@@ -20,7 +22,7 @@
 - 构建：`id("java")`，`compileOnly` axs-api(+axs-core)+spigot/paper-api+annotations+HikariCP+placeholderapi；`tasks.jar { archiveBaseName=... }`。开源仓无需 AXS 的 `ProtectYamlResourcesTask`（明文 yml 即可）。
 
 ## 2. 现状（ArcartX-Aubade 已有 ~120 文件）
-- `aubade-api`：island/player/world/storage/addon/capability/command/config/event 接口（当前在 Aubade 自己包内）。
+- `aubade-api`：早期规划中的仓内契约接口；当前已迁到 `ArcartXSuite/axs-api`。
 - `aubade-core`：`AubadePlugin extends JavaPlugin` + `CoreLifecycleManager` + 内部 addon 体系（`AddonLifecycleManager`/`AbstractFeatureAddon`/`DependencyResolver`）+ 18 命令 + island/player/world + storage(JDBC) + UI(反射桥) + 26 个功能 addon。
 - `aubade-game-skyblock`：仅 2 文件（薄）。
 - 强耦合点：几乎所有 addon/manager 构造签名吃 `AubadePlugin`（`new LevelAddon(plugin)`），且大量 `AubadePlugin.getInstance()`。

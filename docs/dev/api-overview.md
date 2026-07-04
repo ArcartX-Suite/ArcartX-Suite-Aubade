@@ -3,17 +3,11 @@
 ## 模块结构
 
 ```
-aubade-api/
-├── addon/       # 组件接口（GameModeAddon, FeatureAddon, ExtensionAddon）
-├── island/      # 岛屿数据模型（Island, IslandManager, IslandMember）
-├── player/      # 玩家数据模型
-├── world/       # 世界配置接口
-├── command/     # 命令基类
-├── event/       # 事件体系
-├── permission/  # 权限常量
-├── storage/     # 持久层接口
-└── ui/          # UI 桥接抽象
+aubade-core/              # 核心实现
+└── aubade-game-skyblock/ # 经典空岛游戏模式
 ```
+
+共享契约由 `ArcartXSuite/axs-api` 提供，Aubade 仓内不再维护独立 `aubade-api` 模块。
 
 ## 获取 IslandManager
 

@@ -67,10 +67,11 @@ blocks:
 
 ```
 Aubade/
-├── aubade-api/          # 公共 API 接口
 ├── aubade-core/         # 核心实现（生命周期、数据库、命令、UI）
 └── aubade-game-skyblock/ # 经典空岛游戏模式
 ```
+
+共享契约现由 `ArcartXSuite/axs-api` 提供，Aubade 仓内不再保留独立的 `aubade-api` 模块。
 
 ## 构建
 

@@ -2,6 +2,8 @@
 
 > 你的目标：把 Aubade 彻底做成 AXS 模块系列、功能分类清晰、开源上传 GitHub。
 > 动手前有一个 **AXS 类加载机制的硬约束**必须先和你对齐，它直接决定"拆成几个 jar"。
+>
+> 注：本文里出现的 `aubade-api` 为早期规划/历史表述；当前共享契约已迁移到 `ArcartXSuite/axs-api`。
 
 ---
 
@@ -41,8 +43,8 @@ ArcartX-Aubade/                     (GitHub 仓库根)
 ├── gradle.properties
 ├── buildSrc/                       # 公共构建逻辑（版本、编译选项）
 │
-├── aubade-api/                     # Aubade 自身领域接口/事件（源码内共享）
-│   └── xuanmo/aubade/api/{island,player,world,storage,feature,event}
+├── axs-api/（外部依赖）            # 共享契约已迁入 ArcartXSuite
+│   └── xuanmo/arcartxsuite/api/aubade/{island,player,world,storage,feature,event}
 │
 ├── aubade-core/                    # 岛屿/玩家/世界/存储/命令/UI（核心子系统）
 │   └── xuanmo/aubade/core/{island,player,world,storage,command,ui,config}
@@ -99,6 +101,6 @@ ArcartX-Aubade/                     (GitHub 仓库根)
 
 **是否采用方案 A**（源码多模块、发行单个 AXS 模块 jar）？
 确认后我就开始：清空重构 `D:\IDEA\project\ArcartX-Aubade` 为上面的结构，
-先搭 `aubade-api` + `aubade-core` + `aubade-module` 骨架并跑通构建，再逐个功能填充。
+先对齐 `axs-api` 契约，再搭 `aubade-core` + `aubade-module` 骨架并跑通构建，随后逐个功能填充。
 
 （仍只改本地，不推 GitHub，由你后续上传。）
