@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.UUID;
 import xuanmo.arcartxsuite.api.aubade.addon.AddonDescriptor;
 import xuanmo.aubade.core.AubadeCore;
+import xuanmo.aubade.core.command.IslandDelWarpCommand;
+import xuanmo.aubade.core.command.IslandSetWarpCommand;
+import xuanmo.aubade.core.command.IslandWarpCommand;
 import xuanmo.aubade.core.features.AbstractFeatureAddon;
 
 /**
@@ -39,6 +42,13 @@ public class WarpsAddon extends AbstractFeatureAddon {
   @Override
   public void onEnable() {
     super.onEnable();
+    try {
+      getCommandManager().registerSubCommand("island", new IslandWarpCommand(core));
+      getCommandManager().registerSubCommand("island", new IslandSetWarpCommand(core));
+      getCommandManager().registerSubCommand("island", new IslandDelWarpCommand(core));
+    } catch (Exception e) {
+      core.getLogger().warning("[Warps] 注册命令失败: " + e.getMessage());
+    }
     registerUi("warp_board.yml", "warp_board");
     core.getLogger().info("[Warps] 传送牌组件已启用。");
   }
@@ -46,6 +56,7 @@ public class WarpsAddon extends AbstractFeatureAddon {
   @Override
   public void onDisable() {
     super.onDisable();
+    islandWarps.clear();
     core.getLogger().info("[Warps] 传送牌组件已禁用。");
   }
 

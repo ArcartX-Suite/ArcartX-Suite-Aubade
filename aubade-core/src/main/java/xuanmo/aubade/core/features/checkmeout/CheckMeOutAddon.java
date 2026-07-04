@@ -1,16 +1,17 @@
 package xuanmo.aubade.core.features.checkmeout;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import xuanmo.arcartxsuite.api.aubade.addon.AddonDescriptor;
 import xuanmo.arcartxsuite.api.aubade.island.Island;
 import xuanmo.aubade.core.AubadeCore;
+import xuanmo.aubade.core.command.IslandCheckMeOutCommand;
 import xuanmo.aubade.core.features.AbstractExtensionAddon;
 
 /**
@@ -43,12 +44,19 @@ public class CheckMeOutAddon extends AbstractExtensionAddon {
   @Override
   public void onEnable() {
     super.onEnable();
+    try {
+      getCommandManager().registerSubCommand("island", new IslandCheckMeOutCommand(core));
+    } catch (Exception e) {
+      core.getLogger().warning("[CheckMeOut] 注册命令失败: " + e.getMessage());
+    }
     core.getLogger().info("[CheckMeOut] 岛屿审核扩展已启用。");
   }
 
   @Override
   public void onDisable() {
     super.onDisable();
+    submissions.clear();
+    votes.clear();
     core.getLogger().info("[CheckMeOut] 岛屿审核扩展已禁用。");
   }
 
@@ -94,6 +102,14 @@ public class CheckMeOutAddon extends AbstractExtensionAddon {
 
   public List<SubmittedIsland> getAllSubmissions() {
     return new ArrayList<>(submissions.values());
+  }
+
+  public Optional<SubmittedIsland> getSubmission(UUID islandId) {
+    return Optional.ofNullable(submissions.get(islandId));
+  }
+
+  public boolean isSubmitted(UUID islandId) {
+    return submissions.containsKey(islandId);
   }
 
   public boolean hasVoted(UUID islandId, UUID player) {

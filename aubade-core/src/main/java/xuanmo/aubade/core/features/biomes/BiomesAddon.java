@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import xuanmo.arcartxsuite.api.aubade.addon.AddonDescriptor;
 import xuanmo.arcartxsuite.api.aubade.island.Island;
 import xuanmo.aubade.core.AubadeCore;
+import xuanmo.aubade.core.command.IslandBiomeCommand;
 import xuanmo.aubade.core.features.AbstractFeatureAddon;
 
 /**
@@ -49,6 +50,11 @@ public class BiomesAddon extends AbstractFeatureAddon {
   @Override
   public void onEnable() {
     super.onEnable();
+    try {
+      getCommandManager().registerSubCommand("island", new IslandBiomeCommand(core));
+    } catch (Exception e) {
+      core.getLogger().warning("[Biomes] 注册命令失败: " + e.getMessage());
+    }
     registerUi("biome_selector.yml", "biome_selector");
     core.getLogger().info("[Biomes] 生物群系组件已启用。");
   }

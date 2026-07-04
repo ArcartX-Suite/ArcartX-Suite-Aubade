@@ -8,6 +8,7 @@ import xuanmo.arcartxsuite.api.aubade.command.CompositeCommand;
 import xuanmo.arcartxsuite.api.aubade.island.Island;
 import xuanmo.arcartxsuite.api.aubade.permission.Permission;
 import xuanmo.aubade.core.AubadeCore;
+import xuanmo.aubade.core.features.visit.VisitAddon;
 
 /**
  * /island leave — 离开当前所属岛屿。
@@ -28,6 +29,13 @@ public class IslandLeaveCommand extends CompositeCommand {
       return true;
     }
     Player player = (Player) sender;
+
+    VisitAddon visitAddon = getVisitAddon();
+    if (visitAddon != null && visitAddon.isVisiting(player.getUniqueId())) {
+      visitAddon.leaveVisit(player);
+      return true;
+    }
+
     var manager = core.getLifecycleManager().getIslandManager();
     Optional<Island> opt = manager.getIslandByOwner(player.getUniqueId());
 
@@ -55,5 +63,13 @@ public class IslandLeaveCommand extends CompositeCommand {
   public List<String> tabComplete(CommandSender sender, String[] args) {
     return List.of();
   }
-}
 
+  private VisitAddon getVisitAddon() {
+    var addonLifecycleManager = core.getLifecycleManager().getAddonLifecycleManager();
+    if (addonLifecycleManager == null) {
+      return null;
+    }
+    var addon = addonLifecycleManager.getExtension("visit");
+    return addon instanceof VisitAddon visitAddon ? visitAddon : null;
+  }
+}

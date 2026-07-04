@@ -85,7 +85,7 @@ public class IslandManagerImpl implements IslandManager {
     }
 
     cache.put(island);
-    repository.save(island);
+    saveIsland(island);
 
     var skyPlayer = core.getPlayerManager().getPlayer(player);
     skyPlayer.setIslandId(island.getUniqueId());
@@ -127,6 +127,7 @@ public class IslandManagerImpl implements IslandManager {
 
   @Override
   public boolean deleteIsland(Island island) {
+    grid.unregisterIsland(island);
     cache.remove(island.getUniqueId());
     repository.delete(island);
     logger.info("[岛屿] 岛屿已删除: " + island.getUniqueId());
@@ -140,7 +141,10 @@ public class IslandManagerImpl implements IslandManager {
       return cached;
     }
     Optional<Island> fromDb = repository.findById(uniqueId);
-    fromDb.ifPresent(cache::put);
+    fromDb.ifPresent(island -> {
+      cache.put(island);
+      grid.registerIsland(island);
+    });
     return fromDb;
   }
 
@@ -151,19 +155,16 @@ public class IslandManagerImpl implements IslandManager {
       return cached;
     }
     Optional<Island> fromDb = repository.findByOwner(owner);
-    fromDb.ifPresent(cache::put);
+    fromDb.ifPresent(island -> {
+      cache.put(island);
+      grid.registerIsland(island);
+    });
     return fromDb;
   }
 
   @Override
   public Optional<Island> getIslandAt(Location location) {
-    // TODO: 优化为空间索引查询
-    for (Island island : getCachedIslands()) {
-      if (island.inProtectionRange(location)) {
-        return Optional.of(island);
-      }
-    }
-    return Optional.empty();
+    return grid.getIslandAt(location);
   }
 
   @Override
@@ -181,10 +182,15 @@ public class IslandManagerImpl implements IslandManager {
   @Override
   public void saveIsland(Island island) {
     repository.save(island);
+    grid.registerIsland(island);
   }
 
   @Override
   public boolean invitePlayer(Island island, Player player) {
+    if (isIslandMemberLimitReached(island)) {
+      player.sendMessage("§c该岛屿成员已满，无法发送邀请。");
+      return false;
+    }
     pendingInvites.put(player.getUniqueId(), island.getUniqueId());
     String ownerName = core.getServer().getOfflinePlayer(island.getOwner()).getName();
     if (ownerName == null) {
@@ -207,6 +213,10 @@ public class IslandManagerImpl implements IslandManager {
       return false;
     }
     Island island = opt.get();
+    if (isIslandMemberLimitReached(island) && !island.getMembers().containsKey(player.getUniqueId())) {
+      player.sendMessage("§c该岛屿成员已满，无法加入。");
+      return false;
+    }
     island.getMembers().put(player.getUniqueId(), new IslandMember(player.getUniqueId(), Role.MEMBER));
     saveIsland(island);
     player.sendMessage("§a你已加入岛屿！");
@@ -233,6 +243,24 @@ public class IslandManagerImpl implements IslandManager {
 
   public List<Island> getCachedIslands() {
     return List.copyOf(cache.values());
+  }
+
+  private boolean isIslandMemberLimitReached(Island island) {
+    int limit = getIslandMemberLimit(island);
+    return limit > 0 && island.getMembers().size() >= limit;
+  }
+
+  private int getIslandMemberLimit(Island island) {
+    String raw = island.getMeta().get("member_limit");
+    if (raw == null || raw.isBlank()) {
+      return Integer.MAX_VALUE;
+    }
+    try {
+      int limit = Integer.parseInt(raw.trim());
+      return limit > 0 ? limit : Integer.MAX_VALUE;
+    } catch (NumberFormatException ex) {
+      return Integer.MAX_VALUE;
+    }
   }
 }
 
