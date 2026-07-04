@@ -2,6 +2,8 @@ package xuanmo.aubade.core.command;
 
 import java.util.List;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import xuanmo.aubade.core.AubadeCore;
 import xuanmo.arcartxsuite.api.aubade.command.CompositeCommand;
 import xuanmo.arcartxsuite.api.aubade.permission.Permission;
 
@@ -10,12 +12,18 @@ import xuanmo.arcartxsuite.api.aubade.permission.Permission;
  */
 public class DefaultPlayerCommand extends CompositeCommand {
 
-  public DefaultPlayerCommand() {
+  private final AubadeCore core;
+
+  public DefaultPlayerCommand(AubadeCore core) {
     super("help", "显示岛屿命令帮助", Permission.PLAYER, false);
+    this.core = core;
   }
 
   @Override
   public boolean execute(CommandSender sender, String[] args) {
+    if (sender instanceof Player player && core.getUiManager() != null && core.getUiManager().openUi(player, "aubade_main")) {
+      return true;
+    }
     sender.sendMessage("§6========== §eAubade 岛屿帮助 §6==========");
     sender.sendMessage("§e/island create [蓝图] §7— 创建新岛屿");
     sender.sendMessage("§e/island delete §7— 删除当前岛屿");
@@ -36,4 +44,3 @@ public class DefaultPlayerCommand extends CompositeCommand {
     return List.of();
   }
 }
-

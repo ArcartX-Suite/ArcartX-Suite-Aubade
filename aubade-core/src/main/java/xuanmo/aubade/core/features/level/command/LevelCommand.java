@@ -26,6 +26,9 @@ public class LevelCommand extends CompositeCommand {
       return false;
     }
     Player player = (Player) sender;
+    if (args.length == 0 && core.getUiManager() != null && core.getUiManager().openUi(player, "island_level_display")) {
+      return true;
+    }
     Optional<Island> opt = addon.getIslandManager().getIslandByOwner(player.getUniqueId());
     if (opt.isEmpty()) {
       player.sendMessage("§c你还没有岛屿。");

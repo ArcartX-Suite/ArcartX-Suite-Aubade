@@ -17,6 +17,8 @@ dependencies {
     testRuntimeOnly(files("libs/axs-api.jar"))
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("com.github.seeseemelk:MockBukkit-v1.20:3.32.1")
+    testImplementation(project(":aubade-game-skyblock"))
     runtimeOnly(project(":aubade-game-skyblock"))
 }
 

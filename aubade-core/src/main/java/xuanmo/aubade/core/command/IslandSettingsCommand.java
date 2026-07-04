@@ -38,6 +38,9 @@ public class IslandSettingsCommand extends CompositeCommand {
     Island island = opt.get();
 
     if (args.length == 0) {
+      if (core.getUiManager() != null && core.getUiManager().openUi(player, "team_settings")) {
+        return true;
+      }
       player.sendMessage("§6========== 岛屿设置 ==========");
       for (IslandPermission perm : IslandPermission.values()) {
         boolean val = island.getFlags().getOrDefault(perm.name(), perm.getDefaultValue());

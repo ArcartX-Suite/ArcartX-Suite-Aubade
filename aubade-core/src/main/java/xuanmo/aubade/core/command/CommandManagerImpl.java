@@ -30,7 +30,7 @@ public class CommandManagerImpl implements CommandManager {
   }
 
   public void registerDefaults() {
-    registerSubCommand("island", new DefaultPlayerCommand());
+    registerSubCommand("island", new DefaultPlayerCommand(core));
     registerSubCommand("island", new IslandCreateCommand(core));
     registerSubCommand("island", new IslandDeleteCommand(core));
     registerSubCommand("island", new IslandHomeCommand(core));

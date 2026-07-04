@@ -32,13 +32,17 @@ public class IslandTopCommand extends CompositeCommand {
       return true;
     }
 
+    Player player = (Player) sender;
+    if (args.length == 0 && core.getUiManager() != null && core.getUiManager().openUi(player, "aubade_top")) {
+      return true;
+    }
+
     LevelAddon levelAddon = resolveLevelAddon();
     if (levelAddon == null) {
       sender.sendMessage("§c等级功能组件未启用。");
       return true;
     }
 
-    Player player = (Player) sender;
     int page = 1;
     if (args.length > 0) {
       try {
@@ -107,4 +111,3 @@ public class IslandTopCommand extends CompositeCommand {
     return null;
   }
 }
-

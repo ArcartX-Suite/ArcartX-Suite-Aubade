@@ -28,11 +28,14 @@ public class IslandInviteCommand extends CompositeCommand {
       sender.sendMessage("§c此命令只能由玩家执行。");
       return true;
     }
+    Player player = (Player) sender;
+    if (args.length == 0 && core.getUiManager() != null && core.getUiManager().openUi(player, "aubade_invite")) {
+      return true;
+    }
     if (args.length == 0) {
       sender.sendMessage("§c用法: /island invite <玩家>");
       return true;
     }
-    Player player = (Player) sender;
     Player target = Bukkit.getPlayer(args[0]);
     if (target == null) {
       player.sendMessage("§c玩家不在线。");
@@ -60,4 +63,3 @@ public class IslandInviteCommand extends CompositeCommand {
     return List.of();
   }
 }
-

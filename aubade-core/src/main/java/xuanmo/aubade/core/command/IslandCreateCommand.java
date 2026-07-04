@@ -28,6 +28,9 @@ public class IslandCreateCommand extends CompositeCommand {
       return true;
     }
     Player player = (Player) sender;
+    if (args.length == 0 && core.getUiManager() != null && core.getUiManager().openUi(player, "aubade_create")) {
+      return true;
+    }
     IslandManagerImpl manager = getIslandManager();
     if (manager == null) {
       player.sendMessage("§c岛屿管理器尚未初始化。");

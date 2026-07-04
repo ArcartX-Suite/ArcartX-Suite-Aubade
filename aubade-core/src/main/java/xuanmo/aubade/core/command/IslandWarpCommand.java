@@ -42,6 +42,9 @@ public class IslandWarpCommand extends CompositeCommand {
     Map<String, Location> warps = IslandWarpHelper.getWarps(island);
 
     if (args.length == 0 || "list".equalsIgnoreCase(args[0])) {
+      if (core.getUiManager() != null && core.getUiManager().openUi(player, "warp_board")) {
+        return true;
+      }
       // 列出传送点
       if (warps.isEmpty()) {
         player.sendMessage("§c当前岛屿没有设置传送点。使用 §e/island setwarp <名称> §c创建。");

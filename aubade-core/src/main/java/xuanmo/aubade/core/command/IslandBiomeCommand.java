@@ -40,6 +40,9 @@ public class IslandBiomeCommand extends CompositeCommand {
     }
 
     if (args.length == 0) {
+      if (core.getUiManager() != null && core.getUiManager().openUi(player, "biome_selector")) {
+        return true;
+      }
       sendUsage(player, addon);
       return true;
     }

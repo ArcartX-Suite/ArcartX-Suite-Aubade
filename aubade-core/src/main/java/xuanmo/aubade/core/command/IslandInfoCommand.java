@@ -40,6 +40,9 @@ public class IslandInfoCommand extends CompositeCommand {
       }
       opt = manager.getIslandByOwner(target.getUniqueId());
     } else {
+      if (core.getUiManager() != null && core.getUiManager().openUi(player, "member_manage")) {
+        return true;
+      }
       opt = manager.getIslandByOwner(player.getUniqueId());
     }
 
