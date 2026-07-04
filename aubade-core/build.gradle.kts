@@ -11,6 +11,7 @@ dependencies {
     compileOnly("com.zaxxer:HikariCP:5.1.0")
     compileOnly("redis.clients:jedis:5.2.0")
     compileOnly("com.google.code.gson:gson:2.11.0")
+    implementation(project(":aubade-game-skyblock"))
 }
 
 tasks.shadowJar {

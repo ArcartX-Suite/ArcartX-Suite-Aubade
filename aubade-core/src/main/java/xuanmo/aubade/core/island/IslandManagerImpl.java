@@ -57,6 +57,14 @@ public class IslandManagerImpl implements IslandManager {
 
     var addonManager = plugin.getLifecycleManager().getAddonLifecycleManager();
     GameModeAddon gameMode = addonManager != null ? addonManager.getGameMode(gameModeId) : null;
+    if (gameMode == null) {
+      player.sendMessage("\u00a7c当前默认游戏模式未注册，请联系管理员。");
+      return null;
+    }
+    if (gameMode == null) {
+      player.sendMessage("Â§c当前默认游戏模式未注册，请联系管理员。");
+      return null;
+    }
 
     // 获取或创建游戏世界
     org.bukkit.World world = plugin.getServer().getWorld("aubade_skyblock");

@@ -31,8 +31,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Aubade-artifacts
+          retention-days: 7
           path: |
-            aubade-api/build/libs/*.jar
             aubade-core/build/libs/*-all.jar
             aubade-game-skyblock/build/libs/*.jar
 
