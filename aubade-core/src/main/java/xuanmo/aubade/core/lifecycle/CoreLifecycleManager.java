@@ -29,7 +29,6 @@ import xuanmo.aubade.core.features.upgrades.UpgradesAddon;
 import xuanmo.aubade.core.features.visit.VisitAddon;
 import xuanmo.aubade.core.features.voidportals.VoidPortalsAddon;
 import xuanmo.aubade.core.features.warps.WarpsAddon;
-import xuanmo.aubade.game.skyblock.SkyBlockAddon;
 import xuanmo.aubade.core.island.IslandGrid;
 import xuanmo.aubade.core.island.IslandManagerImpl;
 import xuanmo.aubade.core.island.IslandProtectionManager;
@@ -93,6 +92,7 @@ public class CoreLifecycleManager {
 
     this.addonLifecycleManager = new AddonLifecycleManager(core, storageManager);
     core.addonLifecycleManager(addonLifecycleManager);
+    addonLifecycleManager.discoverGameModeAddons(core.getResourceLoader());
     addonLifecycleManager.registerAddon(new LevelAddon(core));
     addonLifecycleManager.registerAddon(new TeamsAddon(core));
     addonLifecycleManager.registerAddon(new ChallengesAddon(core));
@@ -119,7 +119,6 @@ public class CoreLifecycleManager {
     addonLifecycleManager.registerAddon(new CauldronWitcheryAddon(core));
     addonLifecycleManager.registerAddon(new GreenhousesAddon(core));
     addonLifecycleManager.registerAddon(new BlueprintGeneratorAddon(core));
-    addonLifecycleManager.registerAddon(new SkyBlockAddon());
     addonLifecycleManager.enableAddons();
 
   }

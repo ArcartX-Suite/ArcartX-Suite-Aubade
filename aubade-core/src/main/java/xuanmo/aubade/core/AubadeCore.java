@@ -154,6 +154,10 @@ public final class AubadeCore {
     return dataFolder();
   }
 
+  public ClassLoader getResourceLoader() {
+    return resourceLoader;
+  }
+
   public Server getServer() {
     return plugin.getServer();
   }

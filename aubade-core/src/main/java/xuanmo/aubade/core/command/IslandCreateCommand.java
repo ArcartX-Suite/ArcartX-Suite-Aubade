@@ -3,6 +3,7 @@ package xuanmo.aubade.core.command;
 import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import xuanmo.aubade.core.blueprint.BlueprintRegistry;
 import xuanmo.arcartxsuite.api.aubade.command.CompositeCommand;
 import xuanmo.arcartxsuite.api.aubade.permission.Permission;
 import xuanmo.aubade.core.AubadeCore;
@@ -34,6 +35,21 @@ public class IslandCreateCommand extends CompositeCommand {
     }
 
     String blueprintId = args.length > 0 ? args[0] : "default";
+    BlueprintRegistry registry = getBlueprintRegistry();
+    if (registry != null) {
+      if (!registry.hasBlueprint(blueprintId)) {
+        player.sendMessage("§c未找到蓝图 §e" + blueprintId + "§c。");
+        List<String> available = registry.getBlueprintIds();
+        if (!available.isEmpty()) {
+          player.sendMessage("§7可用蓝图: §f" + String.join("§7, §f", available));
+        }
+        return true;
+      }
+    } else {
+      player.sendMessage("§c蓝图系统尚未初始化。");
+      return true;
+    }
+
     var island = manager.createIsland(player, plugin.getLifecycleManager().getCoreConfig().getDefaultGameMode(), blueprintId);
     if (island != null) {
       player.teleport(island.getCenter().clone().add(0, 1, 0));
@@ -45,10 +61,9 @@ public class IslandCreateCommand extends CompositeCommand {
   @Override
   public List<String> tabComplete(CommandSender sender, String[] args) {
     if (args.length == 1) {
-      var addon = plugin.getLifecycleManager().getAddonLifecycleManager().getExtension("blueprint_generator");
-      if (addon instanceof xuanmo.aubade.core.features.blueprint.BlueprintGeneratorAddon gen
-          && gen.getRegistry() != null) {
-        return gen.getRegistry().getBlueprintIds();
+      BlueprintRegistry registry = getBlueprintRegistry();
+      if (registry != null) {
+        return registry.getBlueprintIds();
       }
       return List.of("default");
     }
@@ -58,5 +73,12 @@ public class IslandCreateCommand extends CompositeCommand {
   private IslandManagerImpl getIslandManager() {
     return plugin.getLifecycleManager().getIslandManager();
   }
-}
 
+  private BlueprintRegistry getBlueprintRegistry() {
+    var addon = plugin.getLifecycleManager().getAddonLifecycleManager().getExtension("blueprint_generator");
+    if (addon instanceof xuanmo.aubade.core.features.blueprint.BlueprintGeneratorAddon gen) {
+      return gen.getRegistry();
+    }
+    return null;
+  }
+}

@@ -79,6 +79,11 @@ public class IslandManagerImpl implements IslandManager {
     xuanmo.aubade.core.blueprint.Blueprint blueprint = resolveBlueprint(blueprintId);
     paster.pasteSync(blueprint, island.getCenter());
 
+    Location safeHomeBase = findSafeHomeBase(island.getCenter());
+    if (safeHomeBase != null) {
+      island.setCenter(safeHomeBase);
+    }
+
     cache.put(island);
     repository.save(island);
 
@@ -88,6 +93,25 @@ public class IslandManagerImpl implements IslandManager {
 
     logger.info("[岛屿] 玩家 " + player.getName() + " 使用蓝图 [" + blueprint.getId() + "] 创建了新岛屿: " + island.getUniqueId());
     return island;
+  }
+
+  private Location findSafeHomeBase(Location origin) {
+    if (origin == null || origin.getWorld() == null) {
+      return origin;
+    }
+    org.bukkit.World world = origin.getWorld();
+    int x = origin.getBlockX();
+    int z = origin.getBlockZ();
+    int startY = Math.max(world.getMinHeight(), origin.getBlockY());
+    int maxY = world.getMaxHeight() - 2;
+    for (int y = startY; y <= maxY; y++) {
+      if (world.getBlockAt(x, y, z).getType().isSolid()
+          && world.getBlockAt(x, y + 1, z).isEmpty()
+          && world.getBlockAt(x, y + 2, z).isEmpty()) {
+        return new Location(world, x, y, z);
+      }
+    }
+    return origin;
   }
 
   private xuanmo.aubade.core.blueprint.Blueprint resolveBlueprint(String blueprintId) {

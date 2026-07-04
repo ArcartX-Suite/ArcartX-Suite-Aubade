@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.logging.Logger;
 import xuanmo.arcartxsuite.api.aubade.addon.AddonDescriptor;
 import xuanmo.arcartxsuite.api.aubade.addon.ExtensionAddon;
@@ -37,6 +38,16 @@ public class AddonLifecycleManager {
     if (!addonsDir.exists()) {
       addonsDir.mkdirs();
       return;
+    }
+  }
+
+  public void discoverGameModeAddons(ClassLoader cl) {
+    if (cl == null) {
+      logger.warning("[组件] 游戏模式发现失败: classLoader 为空");
+      return;
+    }
+    for (GameModeAddon addon : ServiceLoader.load(GameModeAddon.class, cl)) {
+      registerAddon(addon);
     }
   }
 
