@@ -21,10 +21,17 @@
 
 ### 安装
 
-1. 从 [Releases](../../releases) 下载 `Aubade-<version>-all.jar`
-2. 将 JAR 放入服务器的 `plugins/` 目录
-3. 启动服务器，插件会自动生成配置和数据库
-4. 编辑 `plugins/Aubade/config.yml` 按需调整
+1. 从 CI Release 下载 `Aubade-<version>.jar`，或本地执行 `./gradlew build` 后取 `aubade-core/build/libs/Aubade-<version>.jar`
+2. 将 JAR 放入 `plugins/ArcartXSuite/modules/`
+3. 在 `plugins/ArcartXSuite/config.yml` 的 `modules:` 下加入：
+
+   ```yml
+   aubade:
+     enabled: true
+   ```
+
+4. 重启服务器，或使用 AXS 的模块热加载流程
+5. AXS 模块使用 `module.yml`，不需要 `plugin.yml`；也不需要 cloud 的 `qq/apiKey/server-code` 或签名公钥配置
 
 ### 玩家命令
 

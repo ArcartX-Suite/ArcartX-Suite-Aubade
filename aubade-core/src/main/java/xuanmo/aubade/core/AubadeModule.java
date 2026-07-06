@@ -197,7 +197,30 @@ public final class AubadeModule extends AbstractAXSModule implements ModuleComma
   }
 
   @Override
+  public List<String> actions() {
+    return commandManager != null ? commandManager.actions() : ModuleCommandHandler.super.actions();
+  }
+
+  @Override
   public boolean onCommand(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
-    return commandManager != null && commandManager.onCommand(sender, label, args);
+    return commandManager != null && commandManager.onCommand(sender, label, stripModuleToken(args));
+  }
+
+  @Override
+  public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull String[] args) {
+    return commandManager != null ? commandManager.onTabComplete(sender, stripModuleToken(args)) : null;
+  }
+
+  /**
+   * 宿主约定 {@code args[0]} 为模块 id/别名，真正的子命令从 {@code args[1]} 开始；
+   * 剥掉路由 token 后再交给模块内命令管理器分发。
+   */
+  private static String[] stripModuleToken(@NotNull String[] args) {
+    if (args.length <= 1) {
+      return new String[0];
+    }
+    String[] routed = new String[args.length - 1];
+    System.arraycopy(args, 1, routed, 0, routed.length);
+    return routed;
   }
 }
