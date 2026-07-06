@@ -2,7 +2,7 @@
 # 支持 & 颜色代码，以及 {placeholder} 占位符
 
 # 通用
-prefix: "&6[Aubade] &r"
+prefix: "&3◆ &6ArcartXSuite &7| &r"
 success: "&a操作成功。"
 error: "&c操作失败：{reason}"
 no-permission: "&c你没有权限执行此操作。"

@@ -10,9 +10,9 @@
 ## 安装步骤
 
 1. 从 [Releases](../../releases) 下载 `Aubade-<version>-all.jar`
-2. 将 JAR 放入服务器的 `plugins/` 目录
+2. 将 JAR 放入服务器的 `plugins/ArcartX-Suite/modules` 目录
 3. 启动服务器
-4. 编辑 `plugins/Aubade/config.yml` 按需调整
+4. 编辑 `plugins/ArcartX-Suite/data/Aubade/config.yml` 按需调整
 
 ## 创建第一个岛屿
 
